@@ -11,6 +11,7 @@ strategy_name = 'Collude and then betray'
 strategy_description = '''collude the first round. If they betray more than 20 times, then we betray. \n'''
     
 def move(my_history, their_history, my_score, their_score):
+  '''initiates strategy <Collude and then betray> '''
   theirB = 0
   if len(my_history) == 0:
       return 'c'
@@ -30,5 +31,5 @@ def move(my_history, their_history, my_score, their_score):
     # Analyze my_history and their_history and/or my_score and their_score.
     # Decide whether to return 'c' or 'b'.
     
-    return 'c'
+    
 
