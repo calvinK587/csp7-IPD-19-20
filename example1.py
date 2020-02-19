@@ -22,4 +22,16 @@ def move(my_history, their_history, my_score, their_score):
     '''
     
     #This example player always betrays.      
-    return 'b'
+
+
+    #collude first, then alternate
+    if len(my_history) == 0:
+      return 'c'
+    elif my_history[-1] == 'c':
+      return 'b'
+    else:
+      return 'c'
+
+    
+   
+      
