@@ -6,31 +6,33 @@
 #     move: A function that returns 'c' or 'b'
 ####
 
-team_name = 'E1'
-strategy_name = 'Betray'
-strategy_description = 'Always betray.'
-    
+team_name = 'Sasuke' # Only 10 chars displayed.
+strategy_name = 'Shoutout @an9sh on IG'
+strategy_description = 'How does this strategy decide?'
+
+number_of_betrays = []
+
 def move(my_history, their_history, my_score, their_score):
-    '''Make my move based on the history with this player.
+    ''' Arguments accepted: my_history, their_history are strings.
+    my_score, their_score are ints.
     
-    history: a string with one letter (c or b) per round that has been played with this opponent.
-    their_history: a string of the same length as history, possibly empty. 
-    The first round between these two players is my_history[0] and their_history[0]
-    The most recent round is my_history[-1] and their_history[-1]
-    
-    Returns 'c' or 'b' for collude or betray.
+    Make my move.
+    Returns 'c' or 'b'. 
     '''
-    
-    #This example player always betrays.      
-
-
-    #collude first, then alternate
-    if len(my_history) == 0:
+    number_of_betrays = []
+    iterated_number = 0
+    for b in their_history:
+      if b == "b":
+        iterated_number += 1
+        number_of_betrays.append(iterated_number)
+    if len(number_of_betrays) < 1:
       return 'c'
-    elif my_history[-1] == 'c':
-      return 'b'
     else:
-      return 'c'
+      for betray in number_of_betrays:
+        return 'b'
+      if 'b' not in their_history[-2:]:
+        return 'c'
+        number_of_betrays = []
 
     
    

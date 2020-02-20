@@ -1,12 +1,12 @@
 --------------------------------------------------------------------------------
 Section 0 - Line up
 --------------------------------------------------------------------------------
-Player 0 (P0): E0, Collude
-        Always collude.
-Player 1 (P1): E1, Betray
-        Always betray.
-Player 2 (P2): E2, Alternate
-        Collude, then alternate.
+Player 0 (P0): Sasuke, Sasuke Strategy
+        How does this strategy decide?
+Player 1 (P1): Sasuke, Shoutout @an9sh on IG
+        How does this strategy decide?
+Player 2 (P2): Naruto, NARUTOOOO
+        How does this strategy decide?
 Player 3 (P3): E3, Collude but retaliate
         Collude first round. Collude, except in a round after getting 
         a severe punishment.
@@ -15,20 +15,20 @@ Section 1 - Player vs. Player
 --------------------------------------------------------------------------------
 Each column shows pts//round earned against each other player:
              P0     P1     P2     P3
-vs. P0 :      0     49      0      0
-vs. P1 :   -248      0   -200   -250
-vs. P2 :     -3   -200      0     -6
-vs. P3 :     -3     46     -2      0
-TOTAL  :   -254   -105   -202   -256
+vs. P0 :      0     87   -500   -496
+vs. P1 :   -490      0   -489   -497
+vs. P2 :    100     93      0      0
+vs. P3 :     97     96     -5      0
+TOTAL  :   -293    276   -994   -993
 --------------------------------------------------------------------------------
 Section 2 - Leaderboard
 --------------------------------------------------------------------------------
 Average points per round:
 Team name (P#):  Score      with strategy name
-E1        (P1):        -27 points with Betray                                  
-E2        (P2):        -51 points with Alternate                               
-E0        (P0):        -64 points with Collude                                 
-E3        (P3):        -64 points with Collude but retaliate                   
+Sasuke    (P1):         69 points with Shoutout @an9sh on IG                   
+Sasuke    (P0):        -74 points with Sasuke Strategy                         
+Naruto    (P2):       -249 points with NARUTOOOO                               
+E3        (P3):       -249 points with Collude but retaliate                   
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 example0--------------------------------------------------------------------------------
@@ -40,23 +40,31 @@ example0------------------------------------------------------------------------
 #     move: A function that returns 'c' or 'b'
 ####
 
-team_name = 'E0'
-strategy_name = 'Collude'
-strategy_description = 'Always collude.'
-    
+team_name = 'Sasuke' # Only 10 chars displayed.
+strategy_name = 'Sasuke Strategy'
+strategy_description = 'How does this strategy decide?'
+
+number_of_betrays = []
+
 def move(my_history, their_history, my_score, their_score):
-    '''Make my move based on the history with this player.
+    ''' Arguments accepted: my_history, their_history are strings.
+    my_score, their_score are ints.
     
-    history: a string with one letter (c or b) per round that has been played with this opponent.
-    their_history: a string of the same length as history, possibly empty. 
-    The first round between these two players is my_history[0] and their_history[0]
-    The most recent round is my_history[-1] and their_history[-1]
-    
-    Returns 'c' or 'b' for collude or betray.
+    Make my move.
+    Returns 'c' or 'b'. 
     '''
-    
-    # This player always colludes.
-    return 'c'
+    number_of_times_colluded = 0
+    number_of_times_betrayed = 0
+    for collude in their_history:
+      if collude == "c":
+        number_of_times_colluded += 1
+    for betray in their_history:
+      if betray == "b":
+        number_of_times_betrayed += 1
+    if number_of_times_betrayed > number_of_times_colluded:
+      return 'c'
+    else:
+      return 'b'
     --------------------------------------------------------------------------------
 example1--------------------------------------------------------------------------------
 ####
@@ -67,31 +75,33 @@ example1------------------------------------------------------------------------
 #     move: A function that returns 'c' or 'b'
 ####
 
-team_name = 'E1'
-strategy_name = 'Betray'
-strategy_description = 'Always betray.'
-    
+team_name = 'Sasuke' # Only 10 chars displayed.
+strategy_name = 'Shoutout @an9sh on IG'
+strategy_description = 'How does this strategy decide?'
+
+number_of_betrays = []
+
 def move(my_history, their_history, my_score, their_score):
-    '''Make my move based on the history with this player.
+    ''' Arguments accepted: my_history, their_history are strings.
+    my_score, their_score are ints.
     
-    history: a string with one letter (c or b) per round that has been played with this opponent.
-    their_history: a string of the same length as history, possibly empty. 
-    The first round between these two players is my_history[0] and their_history[0]
-    The most recent round is my_history[-1] and their_history[-1]
-    
-    Returns 'c' or 'b' for collude or betray.
+    Make my move.
+    Returns 'c' or 'b'. 
     '''
-    
-    #This example player always betrays.      
-
-
-    #collude first, then alternate
-    if len(my_history) == 0:
+    number_of_betrays = []
+    iterated_number = 0
+    for b in their_history:
+      if b == "b":
+        iterated_number += 1
+        number_of_betrays.append(iterated_number)
+    if len(number_of_betrays) < 1:
       return 'c'
-    elif my_history[-1] == 'c':
-      return 'b'
     else:
-      return 'c'
+      for betray in number_of_betrays:
+        return 'b'
+      if 'b' not in their_history[-2:]:
+        return 'c'
+        number_of_betrays = []
 
     
    
@@ -105,10 +115,12 @@ example2------------------------------------------------------------------------
 #     move: A function that returns 'c' or 'b'
 ####
 
-team_name = 'E2'
-strategy_name = 'Alternate'
-strategy_description = 'Collude, then alternate.'
-    
+team_name = 'Naruto' # Only 10 chars displayed.
+strategy_name = 'NARUTOOOO'
+strategy_description = 'How does this strategy decide?'
+
+number_of_betrays = []
+
 def move(my_history, their_history, my_score, their_score):
     '''Make my move based on the history with this player.
     
@@ -119,13 +131,12 @@ def move(my_history, their_history, my_score, their_score):
     
     Returns 'c' or 'b' for collude or betray.
     '''
-    # This player colludes on even numbered rounds (first round is round #0).
 
-    if len(my_history) == 0:
-      return 'b' 
-    if their_history[-1] == 'b':
-      return 'b' 
-    elif their_history[-1] == 'c':
+    if their_history[-2:] == 'c':
+      return 'b'
+    elif 'b' in their_history[-2:]:
+      return 'c'
+    else:
       return 'c'--------------------------------------------------------------------------------
 example3--------------------------------------------------------------------------------
 ####
@@ -159,134 +170,134 @@ def move(my_history, their_history, my_score, their_score):
       return 'c'
     else:
       return 'c'--------------------------------------------------------------------------------
-Section 3 - Game Data for Team E0
+Section 3 - Game Data for Team Sasuke
 --------------------------------------------------------------------------------
--248 pt//round: E0(P0) "Collude"
-49 pt//ound: E1(P1) "Betray"
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+-490 pt//round: Sasuke(P0) "Sasuke Strategy"
+87 pt//ound: Sasuke(P1) "Shoutout @an9sh on IG"
+Bbbccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+cbbBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcC
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBC
-
---------------------------------------------------------------------------------
--3 pt//round: E0(P0) "Collude"
-0 pt//ound: E2(P2) "Alternate"
-cCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-BCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+cccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBB
 
 --------------------------------------------------------------------------------
--3 pt//round: E0(P0) "Collude"
+100 pt//round: Sasuke(P0) "Sasuke Strategy"
+-500 pt//ound: Naruto(P2) "NARUTOOOO"
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+--------------------------------------------------------------------------------
+97 pt//round: Sasuke(P0) "Sasuke Strategy"
+-496 pt//ound: E3(P3) "Collude but retaliate"
+bCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+bCcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBB
+cccccc
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team Sasuke
+--------------------------------------------------------------------------------
+87 pt//round: Sasuke(P1) "Shoutout @an9sh on IG"
+-490 pt//ound: Sasuke(P0) "Sasuke Strategy"
+cbbBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+Bbbccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccc
+
+--------------------------------------------------------------------------------
+93 pt//round: Sasuke(P1) "Shoutout @an9sh on IG"
+-489 pt//ound: Naruto(P2) "NARUTOOOO"
+CcBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+CBcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccc
+
+--------------------------------------------------------------------------------
+96 pt//round: Sasuke(P1) "Shoutout @an9sh on IG"
+-497 pt//ound: E3(P3) "Collude but retaliate"
+cBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+Bccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBB
+ccccccccccccc
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team Naruto
+--------------------------------------------------------------------------------
+-500 pt//round: Naruto(P2) "NARUTOOOO"
+100 pt//ound: Sasuke(P0) "Sasuke Strategy"
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+--------------------------------------------------------------------------------
+-489 pt//round: Naruto(P2) "NARUTOOOO"
+93 pt//ound: Sasuke(P1) "Shoutout @an9sh on IG"
+CBcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+CcBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+cccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBB
+
+--------------------------------------------------------------------------------
+-5 pt//round: Naruto(P2) "NARUTOOOO"
 0 pt//ound: E3(P3) "Collude but retaliate"
 cCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 BCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-Section 3 - Game Data for Team E1
---------------------------------------------------------------------------------
-49 pt//round: E1(P1) "Betray"
--248 pt//ound: E0(P0) "Collude"
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
-
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBC
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcC
-
---------------------------------------------------------------------------------
--200 pt//round: E1(P1) "Betray"
--200 pt//ound: E2(P2) "Alternate"
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-
---------------------------------------------------------------------------------
-46 pt//round: E1(P1) "Betray"
--250 pt//ound: E3(P3) "Collude but retaliate"
-cBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
-BcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
-
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-Section 3 - Game Data for Team E2
---------------------------------------------------------------------------------
-0 pt//round: E2(P2) "Alternate"
--3 pt//ound: E0(P0) "Collude"
-BCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-cCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
---------------------------------------------------------------------------------
--200 pt//round: E2(P2) "Alternate"
--200 pt//ound: E1(P1) "Betray"
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-
---------------------------------------------------------------------------------
--2 pt//round: E2(P2) "Alternate"
--6 pt//ound: E3(P3) "Collude but retaliate"
-bBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-bcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 Section 3 - Game Data for Team E3
 --------------------------------------------------------------------------------
+-496 pt//round: E3(P3) "Collude but retaliate"
+97 pt//ound: Sasuke(P0) "Sasuke Strategy"
+bCcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+bCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+cccccc
+BBBBBB
+
+--------------------------------------------------------------------------------
+-497 pt//round: E3(P3) "Collude but retaliate"
+96 pt//ound: Sasuke(P1) "Shoutout @an9sh on IG"
+Bccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+cBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+ccccccccccccc
+BBBBBBBBBBBBB
+
+--------------------------------------------------------------------------------
 0 pt//round: E3(P3) "Collude but retaliate"
--3 pt//ound: E0(P0) "Collude"
+-5 pt//ound: Naruto(P2) "NARUTOOOO"
 BCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 cCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
---------------------------------------------------------------------------------
--250 pt//round: E3(P3) "Collude but retaliate"
-46 pt//ound: E1(P1) "Betray"
-BcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
-cBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
-
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
-
---------------------------------------------------------------------------------
--6 pt//round: E3(P3) "Collude but retaliate"
--2 pt//ound: E2(P2) "Alternate"
-bcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-bBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
